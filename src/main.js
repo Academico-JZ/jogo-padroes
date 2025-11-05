@@ -1,3 +1,6 @@
+import { registerSW } from 'virtual:pwa-register'
+registerSW({ immediate: true })
+
 import './assets/main.css'
 
 import { createApp } from 'vue'
