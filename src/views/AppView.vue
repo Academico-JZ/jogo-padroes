@@ -2,11 +2,7 @@
   <div class="game-page-container">
     <div class="game-header">
       <div class="time-display">{{ formatTime(gameStore.timeLeft) }}</div>
-      <div class="score-display">Acertos: {{ gameStore.correctAnswers }}</div>
-      <div class="error-display">Erros: {{ gameStore.wrongAnswers }}</div>
-    </div>
-    <div class="sound-debug" v-if="gameStore.debugSound && gameStore.debugSound.last">
-      <small>sound: {{ gameStore.debugSound.last }} — {{ gameStore.debugSound.status }}</small>
+      <div class="score-display">{{ gameStore.correctAnswers }} ACERTO{{ gameStore.correctAnswers === 1 ? '' : 'S' }}</div>
     </div>
 
     <div class="pattern-section">
@@ -14,17 +10,7 @@
       <div class="pattern-display">
         <template v-for="(item, index) in gameStore.currentPattern" :key="index">
           <div v-if="item === '?'" class="pattern-item question">?</div>
-          <div v-else class="pattern-item shape-item">
-            <svg v-if="item.shape === 'circle'" width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="16" :fill="item.color" />
-            </svg>
-            <svg v-else-if="item.shape === 'square'" width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <rect x="6" y="6" width="28" height="28" rx="6" :fill="item.color" />
-            </svg>
-            <svg v-else width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-              <polygon points="20,6 34,30 6,30" :fill="item.color" />
-            </svg>
-          </div>
+          <div v-else class="pattern-item" :style="{ backgroundColor: item.color }"></div>
         </template>
       </div>
     </div>
@@ -33,16 +19,7 @@
       <p class="options-title">Opções:</p>
       <div class="alternatives-grid">
         <button v-for="(alt, index) in gameStore.alternatives" :key="index" @click="gameStore.checkAnswer(alt)"
-          class="shape-option">
-          <svg v-if="alt.shape === 'circle'" width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="30" cy="30" r="24" :fill="alt.color" />
-          </svg>
-          <svg v-else-if="alt.shape === 'square'" width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <rect x="6" y="6" width="48" height="48" rx="8" :fill="alt.color" />
-          </svg>
-          <svg v-else width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-            <polygon points="30,8 52,52 8,52" :fill="alt.color" />
-          </svg>
+          class="shape-option" :style="{ backgroundColor: alt.color }">
         </button>
       </div>
     </div>
@@ -85,13 +62,6 @@ function formatTime(seconds) {
   const remainingSeconds = seconds % 60
   return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
 }
-
-function getAlternativeStyle(alt) {
-  if (gameStore.patternType === 'shapes') {
-    return { backgroundColor: alt }
-  }
-  return {}
-}
 </script>
 
 <style scoped>
@@ -101,7 +71,7 @@ function getAlternativeStyle(alt) {
   align-items: center;
   padding: 20px;
   min-height: 100vh;
-  background-color: #f0f0f0;
+  background: radial-gradient(circle at 1px 5px, #faadad4f 150px, transparent 0px), radial-gradient(circle at 100vw 1px, #FFEA9D 20vh, transparent 0px), radial-gradient(circle at 1px 100vh, #AAF1CB5C 20vh, transparent 0px), radial-gradient(circle at 100vw 100vh, #C2DEFF 20vh, transparent 0px);
   font-family: 'Arial', sans-serif;
 }
 
@@ -131,15 +101,6 @@ function getAlternativeStyle(alt) {
   color: #111;
 }
 
-.error-display {
-  background-color: #FFD7D7; 
-  color: #111;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
 .pattern-section {
   background-color: #fff;
   border-radius: 15px;
@@ -154,8 +115,8 @@ function getAlternativeStyle(alt) {
 .instruction {
   font-size: 1.1em;
   margin-bottom: 15px;
-  color: rgba(175,185,197,0.24); /* #AFB9C53D 24% */
-  background-color: rgba(175,185,197,0.06);
+  color: #333;
+  background-color: #f9f9f9;
   padding: 12px;
   border-radius: 8px;
 }
@@ -169,7 +130,6 @@ function getAlternativeStyle(alt) {
 .pattern-item {
   width: 40px;
   height: 40px;
-  background-color: #f0f0f0;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -178,10 +138,6 @@ function getAlternativeStyle(alt) {
   font-weight: bold;
   color: #555;
   border: 1px solid #ccc;
-}
-
-.pattern-item.shape-item {
-  border: none;
 }
 
 .options-section {
@@ -213,23 +169,13 @@ function getAlternativeStyle(alt) {
   height: 60px;
   border-radius: 10px;
   border: 1px solid #ccc;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #555;
   cursor: pointer;
   transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #f9f9f9;
 }
 
-.alternatives-grid button.shape-option {
-  border: none;
-}
-
 .alternatives-grid button:hover {
-  background-color: #e0e0e0;
+  border-color: #999;
 }
 
 .game-controls {
@@ -248,23 +194,23 @@ function getAlternativeStyle(alt) {
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #fff;
 }
 
 .recomecar-button {
   background-color: #FFEA9D; 
-  color: #ffffff; 
+}
 
 .recomecar-button:hover {
-  background-color: #ffcc80;
+  background-color: #ffdd7a;
 }
 
 .sair-button {
   background-color: #FBADAD; 
-  color: #ffffff; 
 }
 
 .sair-button:hover {
-  background-color: #ef9a9a;
+  background-color: #f99a9a;
 }
 
 .sair-link {

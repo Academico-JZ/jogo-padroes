@@ -1,67 +1,41 @@
-<script setup>
-import { useGameStore } from '../stores/gameStore'
-import { RouterLink } from 'vue-router'
-
-const gameStore = useGameStore()
-
-function playAgain() {
-  gameStore.startGame()
-}
-</script>
-
 <template>
   <div class="feedback-container">
-    <div class="circle top-left-circle"></div>
-    <div class="circle top-right-circle"></div>
-    <div class="circle bottom-left-circle"></div>
-
     <div class="feedback-box">
-      <p class="feedback-message">{{ gameStore.feedbackMessage }}</p>
-      <p>Acertos: {{ gameStore.correctAnswers }}</p>
-      <p>Erros: {{ gameStore.wrongAnswers }}</p>
-      <RouterLink to="/app" class="play-again-link">
-        <button @click="playAgain()">JOGAR NOVAMENTE</button>
+      <p class="feedback-message" v-html="gameStore.feedbackMessage"></p>
+    </div>
+    <div class="game-controls">
+      <RouterLink to="/app" class="sair-link">
+        <button class="recomecar-button" @click="gameStore.startGame()">RECOMEÇAR</button>
+      </RouterLink>
+      <RouterLink to="/" class="sair-link">
+        <button class="sair-button" @click="gameStore.endGame()">SAIR</button>
       </RouterLink>
     </div>
   </div>
 </template>
 
+<script setup>
+import { useGameStore } from '../stores/gameStore'
+import { RouterLink } from 'vue-router'
+
+const gameStore = useGameStore()
+</script>
+
 <style scoped>
 .feedback-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   font-family: 'Arial', sans-serif;
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 0% 0%, rgba(250,173,173,0.36) 180px, transparent 0px), 
-    radial-gradient(circle at 100% 0%, rgba(255,234,157,0.36) 260px, transparent 0px), 
-    radial-gradient(circle at 0% 100%, rgba(228,225,255,0.36) 200px, transparent 0px), 
-    radial-gradient(circle at 100% 100%, rgba(225,228,230,0.6) 220px, transparent 0px); 
-}
-
-.circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.4;
-}
-
-.top-left-circle {
-  display: none; /
-}
-
-.top-right-circle {
-  display: none;
-}
-
-.bottom-left-circle {
-  display: none;
+  background: radial-gradient(circle at 1px 5px, #faadad4f 150px, transparent 0px), radial-gradient(circle at 100vw 1px, #FFEA9D 20vh, transparent 0px), radial-gradient(circle at 1px 100vh, #AAF1CB5C 20vh, transparent 0px), radial-gradient(circle at 100vw 100vh, #C2DEFF 20vh, transparent 0px);
 }
 
 .feedback-box {
-  background-color: rgba(209, 252, 236, 0.9); 
+  background-color: #ABF2CB;
   border-radius: 12px;
   padding: 36px 28px;
   text-align: center;
@@ -75,37 +49,49 @@ function playAgain() {
   font-size: 1.35rem;
   font-weight: 900;
   color: #083d2e;
-  margin: 0 0 14px 0;
+  margin: 0;
   text-transform: uppercase;
   letter-spacing: 1px;
   line-height: 1.25;
 }
 
-.feedback-box p {
-  font-size: 1.1em;
-  color: #555;
-  margin-bottom: 10px;
+.game-controls {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 350px;
+  margin-top: 30px;
 }
 
-.play-again-link {
-  text-decoration: none;
-  margin-top: 20px;
-  display: inline-block;
-}
-
-.feedback-box button {
-  padding: 14px 28px;
-  border-radius: 12px;
+.recomecar-button,
+.sair-button {
+  padding: 12px 25px;
+  border-radius: 10px;
   border: none;
-  background-color: #FFEA9D;
-  color: #ffffff;
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1.1em;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.16s;
+  transition: background-color 0.2s;
+  color: #fff;
 }
 
-.feedback-box button:hover {
-  background-color: #ffd26a;
+.recomecar-button {
+  background-color: #FFEA9D;
+}
+
+.recomecar-button:hover {
+  background-color: #ffdd7a;
+}
+
+.sair-button {
+  background-color: #FBADAD;
+}
+
+.sair-button:hover {
+  background-color: #f99a9a;
+}
+
+.sair-link {
+  text-decoration: none;
 }
 </style>

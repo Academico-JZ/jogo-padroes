@@ -2,15 +2,14 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const SHAPE_COLORS = [
-  '#F554547A',
-  '#C78FF37A',
-  '#4EE2927A',
-  '#FFD2337A',
-  '#C78FF37A',
-  '#C2DEFF7A'
-] // Paleta do jogo (valores com ~48% de opacidade)
+  '#FBADAD',
+  '#E9E9FF',
+  '#ABF2CB',
+  '#FFEA9D',
+  '#C2DEFF'
+]
 
-const SHAPES = ['circle', 'square', 'triangle']
+const SHAPES = ['square']
 
 // listas de sons disponíveis (nomes conforme estão em public/sounds/yes e /no)
 const YES_SOUNDS = [
@@ -85,22 +84,17 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function generatePattern() {
-    patternType.value = 'shapes'
-    const patternData = generateShapePattern()
+    patternType.value = 'colors'
+    const patternData = generateColorPattern()
 
     // pattern: array of {shape, color} with last element replaced by '?'
     currentPattern.value = [...patternData.pattern.map(p => ({...p})), '?']
     alternatives.value = patternData.alternatives
   }
 
-  function generateShapePattern() {
+  function generateColorPattern() {
     const patternLength = Math.floor(Math.random() * 3) + 3
-    // escolher duas formas e duas cores para o padrão
-    const shape1 = SHAPES[Math.floor(Math.random() * SHAPES.length)]
-    let shape2 = shape1
-    while (shape2 === shape1) {
-      shape2 = SHAPES[Math.floor(Math.random() * SHAPES.length)]
-    }
+    // escolher duas cores para o padrão
     const color1 = SHAPE_COLORS[Math.floor(Math.random() * SHAPE_COLORS.length)]
     let color2 = color1
     while (color2 === color1) {
@@ -108,12 +102,12 @@ export const useGameStore = defineStore('game', () => {
     }
 
     const pattern = Array.from({ length: patternLength }, (_, i) => ({
-      shape: i % 2 === 0 ? shape1 : shape2,
+      shape: 'square',
       color: i % 2 === 0 ? color1 : color2,
     }))
 
     const correctAnswer = {
-      shape: patternLength % 2 === 0 ? shape1 : shape2,
+      shape: 'square',
       color: patternLength % 2 === 0 ? color1 : color2,
     }
 
@@ -124,7 +118,7 @@ export const useGameStore = defineStore('game', () => {
   function generateAlternatives(correctAnswer, shapes, colors) {
     const alts = []
     alts.push(correctAnswer)
-    while (alts.length < 4) {
+    while (alts.length < 5) {
       const randomShape = shapes[Math.floor(Math.random() * shapes.length)]
       const randomColor = colors[Math.floor(Math.random() * colors.length)]
       // evitar duplicatas
@@ -201,7 +195,7 @@ export const useGameStore = defineStore('game', () => {
     const expected = patternWithoutQuestion.length % 2 === 0 ? first : second
 
     // answer deve ser um objeto {shape, color}
-    if (answer.shape === expected.shape && answer.color === expected.color) {
+    if (answer.color === expected.color) {
       correctAnswers.value++
       score.value += 10
       playCorrectSound()
@@ -218,23 +212,7 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function calculateFeedback() {
-    const totalQuestions = correctAnswers.value + wrongAnswers.value
-    if (totalQuestions === 0) {
-      feedbackMessage.value = 'Nenhuma rodada jogada.'
-      return
-    }
-
-    const accuracy = (correctAnswers.value / totalQuestions) * 100
-
-    if (accuracy >= 80) {
-      feedbackMessage.value = 'Ótimo! Seu desempenho foi excelente!'
-    } else if (accuracy >= 60) {
-      feedbackMessage.value = 'Bom! Continue praticando para melhorar.'
-    } else if (accuracy >= 40) {
-      feedbackMessage.value = 'Nem ruim nem bom, que tal praticar mais?'
-    } else {
-      feedbackMessage.value = 'Precisa melhorar. Não desanime, a prática leva à perfeição!'
-    }
+    feedbackMessage.value = 'PARABÉNS!<br>SEU DESEMPENHO<br>FOI EXCELENTE!'
   }
 
   let timer = null
