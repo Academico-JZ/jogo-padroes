@@ -10,21 +10,21 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'masked-icon.svg'],
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
       manifest: {
-        name: 'Portfolio',
-        short_name: 'Portfolio',
-        description: 'Conheça nosso portfólio',
+        name: 'Jogo de Padrões',
+        short_name: 'Jogo Padrões',
+        description: 'Um jogo de sequência de padrões de cores.',
         theme_color: '#ffffff',
         icons: [
           {
-            src: 'pwa-192x192.png',
+            src: '/pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any',
           },
           {
-            src: 'pwa-512x512.png',
+            src: '/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -33,7 +33,7 @@ export default defineConfig({
         id: 'com.fake-store.app',
         orientation: 'any',
         background_color: '#ffffff',
-        start_url: '.',
+        start_url: '/',
         launch_handler: {
           client_mode: ['navigate-existing', 'auto'],
         },
