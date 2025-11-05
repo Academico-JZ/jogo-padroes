@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Padrão em JOGO',
-        short_name: 'Padrão JOGO',
-        description: 'Um jogo de sequência de padrões de cores.',
+        name: 'Portfolio',
+        short_name: 'Portfolio',
+        description: 'Conheça nosso portfólio',
         theme_color: '#ffffff',
         icons: [
           {
@@ -30,7 +30,7 @@ export default defineConfig({
             purpose: 'maskable',
           },
         ],
-        id: 'br.edu.ifc.pwa.padraoemjogo',
+        id: 'com.fake-store.app',
         orientation: 'any',
         background_color: '#ffffff',
         start_url: '.',
@@ -45,7 +45,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+});
