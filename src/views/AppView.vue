@@ -1,219 +1,165 @@
-<template>
-  <div class="game-page-container">
-    <div class="game-header">
-      <div class="time-display">{{ formatTime(gameStore.timeLeft) }}</div>
-      <div class="score-display">{{ gameStore.correctAnswers }} ACERTO{{ gameStore.correctAnswers === 1 ? '' : 'S' }}</div>
-    </div>
-
-    <div class="pattern-section">
-      <p class="instruction">Escolha o item que completa a sequência:</p>
-      <div class="pattern-display">
-        <template v-for="(item, index) in gameStore.currentPattern" :key="index">
-          <div v-if="item === '?'" class="pattern-item question">?</div>
-          <div v-else class="pattern-item" :style="{ backgroundColor: item.color }"></div>
-        </template>
-      </div>
-    </div>
-
-    <div class="options-section">
-      <p class="options-title">Opções:</p>
-      <div class="alternatives-grid">
-        <button v-for="(alt, index) in gameStore.alternatives" :key="index" @click="gameStore.checkAnswer(alt)"
-          class="shape-option" :style="{ backgroundColor: alt.color }">
-        </button>
-      </div>
-    </div>
-
-    <div class="game-controls">
-      <button class="recomecar-button" @click="gameStore.startGame()">RECOMEÇAR</button>
-      <RouterLink to="/feedback" class="sair-link">
-        <button class="sair-button" @click="gameStore.endGame()">SAIR</button>
-      </RouterLink>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { useGameStore } from '../stores/gameStore'
-import { onMounted, onUnmounted, watch } from 'vue'
-import { useRouter, RouterLink } from 'vue-router'
-
-const gameStore = useGameStore()
-const router = useRouter()
-
-onMounted(() => {
-  if (!gameStore.gameStarted && !gameStore.gameEnded) {
-    gameStore.startGame()
-  }
-})
-
-watch(() => gameStore.gameEnded, (val) => {
-  if (val) {
-    router.push('/feedback')
-  }
-})
-
-onUnmounted(() => {
-  // Limpar timers ou estados ao desmontar, se necessário
-})
-
-function formatTime(seconds) {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
-  return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`
-}
+import { RouterLink } from 'vue-router'
 </script>
 
+<template>
+  <main class="home-screen">
+    <div class="ambient ambient-left"></div>
+    <div class="ambient ambient-right"></div>
+
+    <div class="content">
+      <p class="eyebrow">Desafio visual</p>
+      <h1>
+        Padrão em
+        <span class="jogo">JOGO</span>
+      </h1>
+      <p class="subtitle">
+        Descubra qual peça completa a sequência antes do tempo acabar.
+      </p>
+    </div>
+
+    <RouterLink to="/app" class="jogar-link">
+      <button class="jogar" type="button">JOGAR</button>
+    </RouterLink>
+  </main>
+</template>
+
 <style scoped>
-.game-page-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+:global(html),
+:global(body),
+:global(main),
+:global(#app) {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+:global(body) {
+  background: #0b1020;
+}
+
+.home-screen {
+  position: relative;
   min-height: 100vh;
-  background: radial-gradient(circle at 1px 5px, #faadad4f 150px, transparent 0px), radial-gradient(circle at 100vw 1px, #FFEA9D 20vh, transparent 0px), radial-gradient(circle at 1px 100vh, #AAF1CB5C 20vh, transparent 0px), radial-gradient(circle at 100vw 100vh, #C2DEFF 20vh, transparent 0px);
-  font-family: 'Arial', sans-serif;
-}
-
-.game-header {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 350px;
-  margin-bottom: 30px;
-}
-
-.time-display,
-.score-display {
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.time-display {
-  background-color: #E9E9FF; 
-  color: #111;
-}
-
-.score-display {
-  background-color: #ABF2CB; 
-  color: #111;
-}
-
-.pattern-section {
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 30px;
-  width: 100%;
-  max-width: 350px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.instruction {
-  font-size: 1.1em;
-  margin-bottom: 15px;
-  color: #333;
-  background-color: #f9f9f9;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.pattern-display {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.pattern-item {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #555;
-  border: 1px solid #ccc;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(251, 180, 180, 0.2), transparent 20%),
+    radial-gradient(circle at 80% 15%, rgba(164, 248, 210, 0.18), transparent 25%),
+    linear-gradient(135deg, #0b1020 0%, #111827 45%, #1a2338 100%);
 }
 
-.options-section {
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 30px;
-  width: 100%;
-  max-width: 350px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+.ambient {
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
 }
 
-.options-title {
-  font-size: 1.1em;
-  margin-bottom: 15px;
-  color: #333;
+.ambient-left {
+  left: -8rem;
+  bottom: -6rem;
+  background: rgba(129, 140, 248, 0.28);
 }
 
-.alternatives-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  justify-items: center;
+.ambient-right {
+  right: -9rem;
+  top: -6rem;
+  background: rgba(52, 211, 153, 0.22);
 }
 
-.alternatives-grid button {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  background-color: #f9f9f9;
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 42rem;
+  text-align: left;
+  padding: 2rem 2.5rem;
 }
 
-.alternatives-grid button:hover {
-  border-color: #999;
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #dfe7ff;
+  opacity: 0.8;
 }
 
-.game-controls {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  max-width: 350px;
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 900;
+  color: #f8fbff;
 }
 
-.recomecar-button,
-.sair-button {
-  padding: 12px 25px;
-  border-radius: 10px;
-  border: none;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  color: #fff;
+.jogo {
+  display: block;
+  font-size: clamp(3rem, 6vw, 6rem);
+  background: linear-gradient(135deg, #ffea9d 0%, #abf2cb 54%, #e9e9ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-.recomecar-button {
-  background-color: #FFEA9D; 
+.subtitle {
+  margin-top: 1.25rem;
+  max-width: 30rem;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: rgba(237, 242, 255, 0.8);
 }
 
-.recomecar-button:hover {
-  background-color: #ffdd7a;
-}
-
-.sair-button {
-  background-color: #FBADAD; 
-}
-
-.sair-button:hover {
-  background-color: #f99a9a;
-}
-
-.sair-link {
+.jogar-link {
+  position: absolute;
+  right: clamp(1.5rem, 5vw, 4rem);
+  bottom: clamp(1.5rem, 5vw, 4rem);
+  z-index: 3;
   text-decoration: none;
+}
+
+.jogar {
+  width: 150px;
+  height: 120px;
+  border: none;
+  cursor: pointer;
+  color: #1a1f2b;
+  background: linear-gradient(135deg, #ffea9d, #ffd76c 52%, #f7c75b);
+  border-radius: 18px 30px 18px 30px;
+  box-shadow: 0 18px 35px rgba(255, 214, 108, 0.35);
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.jogar:hover {
+  transform: translateY(-2px) rotate(-8deg) scale(1.03);
+  box-shadow: 0 22px 38px rgba(255, 214, 108, 0.42);
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 1.5rem 1.25rem 6rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .jogar-link {
+    right: 50%;
+    bottom: 2rem;
+    transform: translateX(50%);
+  }
 }
 </style>

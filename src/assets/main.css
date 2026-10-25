@@ -1,6 +1,41 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import './base.css';
 
+:root {
+  --bg-1: #0b1020;
+  --bg-2: #131d2f;
+  --panel: rgba(15, 23, 42, 0.72);
+  --panel-strong: rgba(15, 23, 42, 0.92);
+  --line: rgba(255, 255, 255, 0.12);
+  --text: #edf2ff;
+  --muted: #b7c1d9;
+  --pink: #fbb4b4;
+  --lavender: #e9e9ff;
+  --mint: #abf2cb;
+  --gold: #ffea9d;
+  --sky: #c2deff;
+  --shadow: rgba(10, 14, 23, 0.32);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+  color: var(--text);
+}
+
+button,
+a {
+  font: inherit;
 }
